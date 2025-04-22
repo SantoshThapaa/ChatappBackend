@@ -9,7 +9,7 @@ export const uploadMedia = async (req, res) => {
       return res.status(400).json({ error: "No file uploaded" });
     }
 
-    const filePath = `/uploads/${req.file.filename}`; 
+    const filePath = `/uploads/${req.file.filename}`;
 
     const newMessage = new Message({
       message: filePath,
@@ -19,11 +19,12 @@ export const uploadMedia = async (req, res) => {
       time: new Date()
     });
 
-    await newMessage.save();
+    const savedMessage = await newMessage.save();
 
     res.status(200).json({
       message: "Media uploaded successfully",
-      filePath
+      filePath,
+      mediaId: savedMessage._id  
     });
 
   } catch (err) {
