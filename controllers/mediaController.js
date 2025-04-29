@@ -9,6 +9,10 @@ export const uploadMedia = async (req, res) => {
       return res.status(400).json({ error: "No file uploaded" });
     }
 
+    if (!sender || !groupId) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
     const filePath = `/uploads/${req.file.filename}`;
 
     const newMessage = new Message({
@@ -36,22 +40,19 @@ export const uploadMedia = async (req, res) => {
   }
 };
 
-
-export const getMediaById = async (req, res)=>{
-    try{
-        const mediaId = req.params.mediaId;
-        const media = await Message.findById(mediaId);
-        if(!media){
-            return res.status(404).json({
-                error: "Media not found"
-            });
-        }
-        res.status(200).json(media);
-    } catch(err){
-        console.error("Get Media Error:", err);
-        res.status(500).json({
-            error: "Failed to fetch media",
-            details: err.message
-        });
+export const getMediaById = async (req, res) => {
+  try {
+    const mediaId = req.params.mediaId;
+    const media = await Message.findById(mediaId);
+    if (!media) {
+      return res.status(404).json({ error: "Media not found" });
     }
+    res.status(200).json(media);
+  } catch (err) {
+    console.error("Get Media Error:", err);
+    res.status(500).json({
+      error: "Failed to fetch media",
+      details: err.message
+    });
+  }
 };
